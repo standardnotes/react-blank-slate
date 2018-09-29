@@ -10,14 +10,31 @@ export default class BridgeManager {
   }
 
   constructor() {
+    this.updateObservers = [];
     this.initiateBridge();
+  }
+
+  addUpdateObserver(callback) {
+    let observer = {callback: callback};
+    this.updateObservers.push(observer);
+    return observer;
+  }
+
+  notifyObserversOfUpdate() {
+    for(var observer of this.updateObservers) {
+      observer.callback();
+    }
+  }
+
+  getNote() {
+    return this.note;
   }
 
   initiateBridge() {
     var permissions = [
       {
         // name: "stream-context-item"
-        name: "stream-items"
+        // name: "stream-items"
       }
     ]
 
@@ -25,11 +42,14 @@ export default class BridgeManager {
       // on ready
     });
 
-    // this.componentManager.streamContextItem((note) => {...})
+    // this.componentManager.streamContextItem((item) => {
+  	// 	this.note = item;
+    //   this.notifyObserversOfUpdate();
+  	// })
 
-    this.componentManager.streamItems(["SN|Component", "SN|Theme", "SF|Extension"], (items) => {
-      this.items = items.filter((item) => {return !item.isMetadataUpdate});
-    });
+    // this.componentManager.streamItems(["SN|Component", "SN|Theme", "SF|Extension"], (items) => {
+    //   this.items = items.filter((item) => {return !item.isMetadataUpdate});
+    // });
   }
 
 
