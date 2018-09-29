@@ -33,7 +33,7 @@ export default class BridgeManager {
   initiateBridge() {
     var permissions = [
       {
-        // name: "stream-context-item"
+        name: "stream-context-item"
         // name: "stream-items"
       }
     ]
@@ -43,7 +43,7 @@ export default class BridgeManager {
     });
 
     // this.componentManager.streamContextItem((item) => {
-  	// 	this.note = item;
+    //   this.note = item;
     //   this.notifyObserversOfUpdate();
   	// })
 
