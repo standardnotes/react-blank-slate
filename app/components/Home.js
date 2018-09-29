@@ -10,7 +10,17 @@ export default class Home extends React.Component {
 
     BridgeManager.get().addUpdateObserver(() => {
       this.setState({note: BridgeManager.get().getNote()});
+      this.analyzeNote();
     })
+  }
+
+  analyzeNote() {
+    var s = this.state.note.content.text;
+    s = s.replace(/(^\s*)|(\s*$)/gi,"");//exclude  start and end white-space
+    s = s.replace(/[ ]{2,}/gi," ");//2 or more space to 1
+    s = s.replace(/\n /,"\n"); // exclude newline with a start spacing
+    let wordCount = s.split(' ').length;
+    this.setState({wordCount: wordCount});
   }
 
   render() {
@@ -26,6 +36,8 @@ export default class Home extends React.Component {
             <p>
               Working note content: <strong>{this.state.note.content.text}</strong>
             </p>
+
+            <p>Number of words: <strong>{this.state.wordCount}</strong></p>
           </div>
         }
       </div>
