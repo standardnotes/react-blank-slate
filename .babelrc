@@ -1,12 +1,19 @@
 {
-  "presets": [ "es2015", "stage-0", "react"],
+  "presets": [
+    "@babel/env",
+    "@babel/react",
+  ],
 
   /* if you want to use babel runtime, uncomment the following line */
   // "plugins": ["transform-runtime"],
 
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+  ],
+
   "env": {
-    "build": {
-      "optional": ["optimisation", "minification"]
+    "production": {
+      "presets": ["minify"]
     }
   }
 }

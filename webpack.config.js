@@ -1,10 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const uglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  mode: "development",
   devtool: 'cheap-source-map',
   devServer: {
     historyApiFallback: true,
@@ -13,7 +13,8 @@ module.exports = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    }
+    },
+    hot: true,
   },
   entry: [
     path.resolve(__dirname, 'app/main.js'),
@@ -25,19 +26,16 @@ module.exports = {
     filename: './dist.js'
   },
   module: {
-    loaders: [
+    rules: [
       { test: /\.css$/, include: path.resolve(__dirname, 'app'), loader: 'style-loader!css-loader' },
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            'css-loader',
-            { loader: 'sass-loader', query: { sourceMap: false } },
-          ],
-          publicPath: '../'
-        }),
+        use: [ // Replaces ExtractTextPlugin, which is deprecated
+          'style-loader',
+          'css-loader',
+          { loader: 'sass-loader', query: { sourceMap: false } },
+        ],
       },
       { test: /\.js[x]?$/, include: [
         path.resolve(__dirname, 'app'),
@@ -48,12 +46,22 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx']
   },
+  optimization: {
+    minimize: true, // Replaces uglifyJsPlugin
+    splitChunks: { // Replaces ExtractTextPlugin.allChunks
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+      },
+    },
+  },
   plugins: [
-    new ExtractTextPlugin({ filename: './dist.css', disable: false, allChunks: true}),
-    new uglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
+    new MiniCssExtractPlugin({
+      filename: './dist.css',
     }),
     new webpack.DefinePlugin({
       'process.env': {

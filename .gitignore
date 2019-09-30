@@ -37,6 +37,9 @@ node_modules
 ## building output directory
 build
 
+## Minimized output
+dist
+
 # OSX
 .DS_Store
 
