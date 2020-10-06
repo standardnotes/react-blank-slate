@@ -3,10 +3,7 @@ import BridgeManager from '../lib/BridgeManager';
 
 export default class Home extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {};
+ state = {};
 
     BridgeManager.get().addUpdateObserver(() => {
       this.setState({note: BridgeManager.get().getNote()});
