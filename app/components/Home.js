@@ -15,7 +15,9 @@ export default class Home extends React.Component {
   }
 
   analyzeNote() {
-    let wordCount = this.state.note.content.text.match(/\b/gm).length / 2;
+    // Count any word characters or ellipses:
+    // https://regex101.com/r/hJ61ft/1
+    let wordCount = this.state.note.content.text.match(/([\w'‘’\-]|(\.{3}))+/gm).length;
     this.setState({wordCount: wordCount});
   }
 
